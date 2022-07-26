@@ -30,6 +30,9 @@ struct DataFetch {
                 //For each recipe in recipeData, assign a unique id.
                 for recipe in recipeData{
                     recipe.id = UUID()
+                    for ingredient in recipe.ingredients{
+                        ingredient.id = UUID()
+                    }
                 }
                 //Return a recipe array.
                 return recipeData

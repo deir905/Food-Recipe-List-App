@@ -10,6 +10,7 @@ import SwiftUI
 struct RecipeDetailedView: View {
     //need to initialise this variable
     var recipe:Recipe
+    @State var selectedIndex:Int = 6
     var body: some View {
         ScrollView{
             VStack(alignment: .leading){
@@ -17,17 +18,32 @@ struct RecipeDetailedView: View {
                 Image(recipe.image)
                     .resizable()
                     .scaledToFit()
+                
+                //Serving picker
+                VStack (alignment: .leading){
+                    Text("Select your serving size:")
+                        .font(.headline)
+                    Picker("",selection: $selectedIndex) {
+                        Text("2").tag(2)
+                        Text("4").tag(4)
+                        Text("6").tag(6)
+                        Text("8").tag(8)
+                    }.pickerStyle(SegmentedPickerStyle())
+                        .frame(width:160)
+                }
+                .padding()
+                Divider()
                 //Ingredients
                 VStack(alignment: .leading){
                     Text("Ingredients")
                         .font(.headline)
-                    ForEach (recipe.ingredients, id:\.self){ item in
+                    ForEach (recipe.ingredients){ ingredient in
 
-                        Text("• " + item)
+                        Text("• " + RecipeModel.getPortion(recipe: recipe, ingredient: ingredient, portionSize: selectedIndex) + " " + ingredient.name)
                             .padding(.leading, 5.0)
                         
                     }
-                }
+                }.padding(.horizontal)
                 Divider()
                 //Directions
                 VStack(alignment: .leading){
@@ -38,7 +54,7 @@ struct RecipeDetailedView: View {
                             .padding([.leading, .bottom], 5.0)
                         
                     }
-                }
+                }.padding(.horizontal)
             }
         }.navigationBarTitle(Text(recipe.name))
     }
